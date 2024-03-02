@@ -20,6 +20,9 @@ from prompt_toolkit import prompt
 # Classes para manipulação de datas e horas, utilizadas para lidar com informações temporais.
 from datetime import datetime
 
+export FLASK_APP=index.py   
+export FLASK_ENV=development
+
 
 def get_data_atual():
     """
