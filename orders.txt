@@ -1,0 +1,35 @@
+Bebida Branca, 5.0, cash, 2024-03-02,14:35:10
+Beer 20cl, 2.0, cash, 2024-03-02,14:35:12
+Beer 30cl, 3.0, cash, 2024-03-02,14:35:14
+Beer 50cl, 4.0, cash, 2024-03-02,14:35:16
+Beirão Sour, 7.0, cash, 2024-03-02,14:35:05
+Cidra, 3.0, cash, 2024-03-02,14:35:23
+Cuba Libre, 7.0, cash, 2024-03-02,14:34:53
+Expresso Martini, 8.0, cash, 2024-03-02,14:35:03
+Gin Tônico, 7.0, cash, 2024-03-02,14:34:55
+Long Island, 9.0, cash, 2024-03-02,14:35:00
+Moskow Mule, 8.0, cash, 2024-03-02,14:34:58
+Mr Beans, 6.0, cash, 2024-03-02,14:34:51
+Mr Beans Virgin, 4.0, cash, 2024-03-02,14:35:08
+Porto Sangria, 7.0, cash, 2024-03-02,14:34:49
+Porto Tônico, 6.0, cash, 2024-03-02,14:34:47
+Super Bock, 2.5, cash, 2024-03-02,14:35:20
+Bebida Branca, 10.0, card, 2024-03-02,14:36:42
+Beer 20cl, 4.0, card, 2024-03-02,14:36:43
+Beer 30cl, 6.0, card, 2024-03-02,14:36:48
+Beer 50cl, 8.0, card, 2024-03-02,14:36:50
+Beirão Sour, 14.0, card, 2024-03-02,14:36:38
+Cidra, 6.0, card, 2024-03-02,14:36:53
+Cuba Libre, 70.0, card, 2024-03-02,14:36:46
+Expresso Martini, 16.0, card, 2024-03-02,14:36:35
+Gin Tônico, 14.0, card, 2024-03-02,14:36:30
+Long Island, 18.0, card, 2024-03-02,14:36:33
+Moskow Mule, 16.0, card, 2024-03-02,14:36:31
+Mr Beans, 12.0, card, 2024-03-02,14:36:25
+Mr Beans Virgin, 8.0, card, 2024-03-02,14:36:40
+Porto Sangria, 14.0, card, 2024-03-02,14:36:23
+Porto Tônico, 12.0, card, 2024-03-02,14:36:21
+Super Bock, 5.0, card, 2024-03-02,14:36:51
+Vinho B. Rev, 10.0, card, 2024-03-02,14:36:58
+Vinho Branco, 6.0, card, 2024-03-02,14:36:55
+Vinho Porto B, 24.0, card, 2024-03-02,14:47:50

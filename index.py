@@ -7,28 +7,26 @@ from flask import Flask
 from flask import Flask, render_template, request, session, redirect, send_file, url_for
 from rich.console import Console
 from rich.console import Console
-from rich.table import Table
 import os 
-######################### <<<<<<  FICHEIRO DE FUNÇOES AUXILIARES >>>>>> ###################
-import os
 from beaupy import confirm, prompt
-# Módulo para manipulação de tempo, utilizado para pausar a execução do programa em determinados pontos.
 import time
-# Submódulo contendo vários estilos de indicadores de progresso (spinners).
 from beaupy.spinners import *
 from prompt_toolkit import prompt
-# Classes para manipulação de datas e horas, utilizadas para lidar com informações temporais.
 from datetime import datetime
 
+console = Console()
+
+app = Flask(__name__)
+app.secret_key = '123'
 
 def get_data_atual():
     """
-    Retorna a data atual no formato 'YYYY-MM-DD'.
+    Retorna a data e hora atuais no formato 'YYYY-MM-DD HH:MM:SS'.
 
     Returns:
-    str: Data atual no formato 'YYYY-MM-DD'.
+    str: Data e hora atuais no formato 'YYYY-MM-DD HH:MM:SS'.
     """
-    data_atual = datetime.now().strftime('%Y-%m-%d')
+    data_atual = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     return data_atual
 
 
@@ -56,86 +54,11 @@ def select_date(mensagem):
 
         return selected_date
 
-
-def listar_arquivos_txt():
-    '''
-    Função para listar os arquivos .txt disponíveis na pasta atual e exibi-los na tela.
-    '''
-    arquivos_disponiveis = os.listdir()
-    write_title("Ficheiros Disponíveis")
-    for arquivo in arquivos_disponiveis:
-        if arquivo.endswith('.txt'):
-            print(arquivo)
-
-
 def clear():
     '''
     Função para limpar ecrâ.
     '''
     os.system('cls')
-
-
-def wait_clear(mensagem):
-    '''
-    Função para limpar ecrâ com uma funcionalidade extra: fornece ao User uma condição de saida antes de limpar o ecrã.
-
-    Argumento:
-    - mensagem (String): Mensagem que desejamos gerar para o User confirmar.
-    '''
-    if confirm(f"{mensagem}"):
-        os.system('cls')
-
-
-def thinking(num, mensagem):
-    '''
-    Função auxilar que permite gerar uma mensagem dinâmica na consola.
-
-    Argumentos: 
-    - num (integer): Número de segundos que a mensagem deve aparecer na consola.
-    - mensagem (string): Mensagem que será apresentada à consola.
-    '''
-    clear()
-    # 'DOTS' é uma das muitas possibilidades de animações do Beaupy.
-    spinner = Spinner(DOTS, f"{mensagem}")
-    spinner.start()
-    time.sleep(num)
-    spinner.stop()
-    os.system('cls')  # No fim da animação limpa o ecrã.
-
-
-def animacao_inicial(mensagem):
-    """
-    Exibe uma animação de spinner na tela para mostrar uma mensagem de boas-vindas.
-    """
-    clear()  # Limpa a tela do console.
-    # Define a sequência de frames para a animação do spinner.
-    spinner_animation = ['▉▉', '▌▐', '  ', '▌▐', '▉▉']
-
-    # Cria um objeto de spinner com a sequência de frames e a mensagem "BEM VINDO".
-    spinner = Spinner(spinner_animation, f"{mensagem}")
-    # Inicia a animação do spinner.
-    spinner.start()
-    # Aguarda por 3 segundos para exibir a animação.
-    time.sleep(2)
-    # Para a animação do spinner.
-    spinner.stop()
-
-
-def write_title(title):
-    '''
-    Função para escrever um título formatado.
-    Recebe como argumento:
-
-    - title: Título a ser exibido.
-    '''
-    design = ""
-    comp = int((30 - len(title))/2)
-    for i in range(comp):
-        design += "-"
-
-    print(f"{design}{title}{design}")
-    print("-"*30)
-
 
 def is_valid_name(nome):
     '''
@@ -165,12 +88,6 @@ def is_valid_name(nome):
             print("O nome não pode conter caracteres especiais!")
             return False
     return True
-
-
-console = Console()
-
-app = Flask(__name__)
-app.secret_key = '123'
 
 drinks = [
     {'Porto Tônico': 6.0},
@@ -235,16 +152,16 @@ def order():
     if meth_pay == 'cash':
         orders_cash = session.get('orders_cash', {})
         if drink_name in orders_cash:
-            orders_cash[drink_name] = (orders_cash[drink_name][0] + total_price, meth_pay)
+            orders_cash[drink_name] = (orders_cash[drink_name][0] + total_price, meth_pay, get_data_atual())
         else:
-            orders_cash[drink_name] = (total_price, meth_pay)
+            orders_cash[drink_name] = (total_price, meth_pay, get_data_atual())
         session['orders_cash'] = orders_cash
     else:
         orders_card = session.get('orders_card', {})
         if drink_name in orders_card:
-            orders_card[drink_name] = (orders_card[drink_name][0] + total_price, meth_pay)
+            orders_card[drink_name] = (orders_card[drink_name][0] + total_price, meth_pay, get_data_atual())
         else:
-            orders_card[drink_name] = (total_price, meth_pay)
+            orders_card[drink_name] = (total_price, meth_pay, get_data_atual())
         session['orders_card'] = orders_card
     #app.logger.info(session['orders_cash']) # APGAR MAIS TARDE 
     #app.logger.info(session['orders_card']) # APGAR MAIS TARDE 
@@ -292,37 +209,32 @@ def clear_session():
     # Redirect the user to the index page
     return redirect(url_for('menu'))
 
-
-
 @app.route('/export_orders', methods=['POST'])
 def export_orders():
     orders = []
     orders_cash = session.get('orders_cash', {})
-    orders_card = session.get('orders_card', {})
-    
+    orders_card = session.get('orders_card', {})                                                        
+
     for drink, details in orders_cash.items():
-        orders.append({'drink_name': drink, 'num_drinks': details[0], 'meth_payment': 'cash'})
+        orders.append({'drink_name': drink, 'num_drinks': details[0], 'meth_payment': 'cash', 'date': details[2].split()[0], 'time': details[2].split()[1]})
     for drink, details in orders_card.items():
-        orders.append({'drink_name': drink, 'num_drinks': details[0], 'meth_payment': 'card'})
+        orders.append({'drink_name': drink, 'num_drinks': details[0], 'meth_payment': 'card', 'date': details[2].split()[0], 'time': details[2].split()[1]})
 
     if orders:
-        file_name = 'orders.txt'
-        file_path = os.path.join(app.root_path, file_name)
         try:
+            file_name = 'orders.txt'
+            file_path = os.path.join(app.root_path, file_name)
             with open(file_path, 'w') as file:
                 for order in orders:
-                     file.write(f"{order['drink_name']}, {order['num_drinks']}, {order['meth_payment']}\n")
-        except FileNotFoundError:
-            print("File not found!")
-            return render_template('index.html', drinks=drinks)
-
-        return send_file(file_path, as_attachment=True)
+                    file.write(f"{order['drink_name']}, {order['num_drinks']}, {order['meth_payment']}, {order['date']}, {order['time']}\n")
+            return send_file(file_path, as_attachment=True)
+        except Exception as e:
+            return f"Error exporting orders: {e}", 500
+             
     else:
-        return 'No orders to export'
+        message = "No orders to export."
+        return render_template('index', drinks=drinks, message=message)
     
-
-
-
 
 if __name__ == '__main__':
     app.run(debug=True)

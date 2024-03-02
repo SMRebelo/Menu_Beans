@@ -1,20 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Drink Order</title>
     <!-- Latest compiled and minified CSS -->
-    <link
-      rel="stylesheet"
-      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
-    />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 
     <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <style>
+        /* Your CSS styles */
+    </style>
+</head>
     <style>
       body,
       html {
@@ -95,10 +96,11 @@
       }
 
       .slider {
-        max-height: 550px; /* Set max-height for the slider */
-        width: 50%;
+        max-height: 480px; /* Set max-height for the slider */
+        width: 60%;
         overflow-y: auto; /* Add scrollbar for vertical overflow */
       }
+
     </style>
   </head>
   <body>
@@ -109,9 +111,7 @@
           <div class="slider">
             <ul class="list-group">
               {% for drink, details in orders_cash.items() %}
-              <li class="list-group-item list-group-item-info">
-                {{ drink }}: {{ details[0]}}€
-              </li>
+              <li class="list-group-item list-group-item-info">{{ drink }} -> {{ details[0]}}€  --- [{{ details[2].split()[1] }}]</li>
               {% endfor %}
             </ul>
           </div>
@@ -123,7 +123,7 @@
             <ul class="list-group">
               {% for drink, details in orders_card.items() %}
               <li class="list-group-item list-group-item-info">
-                {{ drink }}: {{ details[0]}}€
+                {{ drink }} -> {{ details[0] }}€  --- [{{ details[2].split()[1] }}]
               </li>
               {% endfor %}
             </ul>
@@ -166,28 +166,22 @@
       </div>
     </div>
     <script>
-      document
-        .getElementById("sendReportForm")
-        .addEventListener("submit", function (event) {
-          var confirmation = confirm(
-            "Are you sure you want to export the file?"
-          );
+      // JavaScript code
+      document.getElementById("sendReportForm").addEventListener("submit", function (event) {
+          var confirmation = confirm("Are you sure you want to export the file?");
           if (!confirmation) {
-            event.preventDefault();
-            window.location.href = "/";
+              event.preventDefault();
+              window.location.href = "/";
           }
-        });
+      });
+  
       // Add event listener to the clear session button
-      document
-        .getElementById("clearSessionButton")
-        .addEventListener("click", function () {
-          var confirmation = confirm(
-            "Are you sure you want to clear the session?"
-          );
+      document.getElementById("clearSessionButton").addEventListener("click", function () {
+          var confirmation = confirm("Are you sure you want to clear the session?");
           if (confirmation) {
-            document.getElementById("clearSessionForm").submit();
+              document.getElementById("clearSessionForm").submit();
           }
-        });
-    </script>
+      });
+  </script>
   </body>
 </html>
