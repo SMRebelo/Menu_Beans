@@ -1,0 +1,37 @@
+Amendoins, 16.0, cash
+Café, 8.0, cash
+Cidra, 21.0, cash
+Coca Cola, 16.0, cash
+Ginger Ale, 14.0, cash
+Ginger Beer, 21.0, cash
+Limonada, 51.0, cash
+Porto Sangria, 56.0, cash
+Porto Tônico, 42.0, cash
+Vinho B. Rev, 85.0, cash
+Vinho Branco, 21.0, cash
+Vinho Porto B, 21.0, cash
+Vinho Porto T, 21.0, cash
+Vinho T. Rev, 35.0, cash
+Vinho Tinto, 21.0, cash
+ginger beer, 3.0, cash
+limonada, 135.0, cash
+super bock, 92.5, cash
+Água, 13.0, cash
+Água Pedras, 16.0, cash
+água, 2.0, cash
+água tônica, 6.0, cash
+Beer 20cl, 16.0, card
+Cidra, 24.0, card
+Coca Cola, 16.0, card
+Gin Tônico, 35.0, card
+Ginger Ale, 16.0, card
+Moskow Mule, 32.0, card
+Super Bock, 20.0, card
+Vinho Branco, 24.0, card
+Vinho T. Rev, 40.0, card
+ginger ale, 118.0, card
+super bock, 5.0, card
+Água, 8.0, card
+água, 21.0, card
+água pedras, 24.0, card
+água tônica, 24.0, card

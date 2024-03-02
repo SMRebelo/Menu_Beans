@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Drink Order</title>
+    <!-- Latest compiled and minified CSS -->
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+    />
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <style>
+      body,
+      html {
+        margin: 0;
+        background: rgb(195, 124, 34);
+        background: linear-gradient(
+          0deg,
+          rgba(195, 124, 34, 0.5373972831320029) 9%,
+          rgba(253, 178, 45, 0.3046241738883054) 100%
+        );
+      }
+
+      .container-fluid {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        height: 100vh;
+        box-sizing: border-box; /* Include border in total height */
+        overflow: hidden; /* Hide overflow content */
+      }
+
+      .top {
+        display: flex;
+        justify-content: space-around;
+        flex-direction: row;
+        align-items: center;
+        width: 100%;
+        height: 90%; /* Adjusted height */
+        margin-bottom: 5px;
+        box-sizing: border-box; /* Include border in total height */
+        overflow: hidden; /* Hide overflow content */
+      }
+
+      .bottom {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        padding-bottom: 15px;
+        box-sizing: border-box; /* Include border in total height */
+        overflow: hidden; /* Hide overflow content */
+      }
+
+      .top_left,
+      .top_right {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 45%;
+        height: 100%;
+        box-sizing: border-box; /* Include border in total height */
+        overflow-y: auto; /* Add overflow-y for scrolling */
+      }
+
+      .bottom_left,
+      .bottom_right {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 50%;
+        box-sizing: border-box; /* Include border in total height */
+        overflow-y: auto; /* Add overflow-y for scrolling */
+      }
+
+      .button-row {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        margin-top: 20px;
+        box-sizing: border-box; /* Include border in total height */
+      }
+
+      .button-row button {
+        margin: 0 10px;
+      }
+
+      .slider {
+        max-height: 550px; /* Set max-height for the slider */
+        width: 50%;
+        overflow-y: auto; /* Add scrollbar for vertical overflow */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="top">
+        <div class="top_left">
+          <h2 class="h1">CASH</h2>
+          <div class="slider">
+            <ul class="list-group">
+              {% for drink, details in orders_cash.items() %}
+              <li class="list-group-item list-group-item-info">
+                {{ drink }}: {{ details[0]}}€
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+          <h2 class="h1">Total: {{ total_cash }}€</h2>
+        </div>
+        <div class="top_right">
+          <h2 class="h1">CARD</h2>
+          <div class="slider">
+            <ul class="list-group">
+              {% for drink, details in orders_card.items() %}
+              <li class="list-group-item list-group-item-info">
+                {{ drink }}: {{ details[0]}}€
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+          <h2 class="h1">Total: {{ total_card }}€</h2>
+        </div>
+      </div>
+      <div class="bottom">
+        <div class="bottom_left">
+          <form action="/order" method="POST">
+            <button type="submit" class="btn btn-primary btn-lg">
+              Back Menu
+            </button>
+          </form>
+        </div>
+        <div class="bottom_right">
+          <form id="sendReportForm" action="/export_orders" method="POST">
+            <input type="hidden" name="bottom_right" value="none" />
+            <button
+              id="sendReportForm"
+              type="submit"
+              class="btn btn-success btn-lg"
+              style="margin-rigth: 10px"
+            >
+              Send Report
+            </button>
+          </form>
+          <form id="clearSessionForm" action="/clear_session" method="get">
+            <input type="hidden" name="method_payment" value="none" />
+            <button
+              id="clearSessionButton"
+              type="button"
+              class="btn btn-danger btn-lg"
+              style="margin-left: 10px"
+            >
+              Clear Session
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <script>
+      document
+        .getElementById("sendReportForm")
+        .addEventListener("submit", function (event) {
+          var confirmation = confirm(
+            "Are you sure you want to export the file?"
+          );
+          if (!confirmation) {
+            event.preventDefault();
+            window.location.href = "/";
+          }
+        });
+      // Add event listener to the clear session button
+      document
+        .getElementById("clearSessionButton")
+        .addEventListener("click", function () {
+          var confirmation = confirm(
+            "Are you sure you want to clear the session?"
+          );
+          if (confirmation) {
+            document.getElementById("clearSessionForm").submit();
+          }
+        });
+    </script>
+  </body>
+</html>

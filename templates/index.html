@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Drink Order</title>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <style>
+      body,
+      html {
+  
+        margin: 0;
+        background: rgb(195,124,34);
+background: linear-gradient(0deg, rgba(195,124,34,0.5373972831320029) 9%, rgba(253,178,45,0.6046241738883054) 100%);
+      }
+
+      #popup {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(255, 255, 255, 0.9);
+        z-index: 9999;
+        overflow-y: auto; /* Add overflow-y for scrolling */
+      }
+
+      .popup-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: Azure;
+        padding: 50px;
+        border: 5px solid #ccc;
+        height: auto;
+        max-height: 100%;
+        overflow-y: auto;
+      }
+
+      .number-table {
+        margin-top: 2.5em;
+        margin-left: 1.5em;
+      }
+
+      .number-table button {
+        width: 60px;
+        height: 60px;
+        font-size: 24px;
+        margin: 5px;
+      }
+      .container-fluid {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        height: 100vh;
+        overflow-x: hidden;
+        border: solid 3px red; /* Add horizontal overflow for scrolling */
+      }
+      .row1 {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        height: 90%; /* Adjust the height as needed */
+      }
+      .row2 {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: center;
+        width: 100%;
+      }
+      #cont_row1 {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-around; /* Spread items evenly */
+        align-items: center;
+        width: 100%;
+        height: auto; /* Adjust height to fit content */
+      }
+      #cont_row_button1 {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100px;
+        width: 150px; /* Maximum width for larger screens */
+        margin: 5px; /* Adjust margin as needed */
+
+      }
+      /* Responsive adjustments */
+      @media (max-width: 768px) {
+        #cont_row_button1 {
+          width: 45%; /* Adjust width for smaller screens */
+        }
+      }
+      @media (max-width: 576px) {
+        #cont_row_button1 {
+          width: 100%; /* Full width for extra small screens */
+          max-width: none; /* Remove max-width for extra small screens */
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="row1">
+        <div class="col-sm-12" id="cont_row1">
+          {% for drink in drinks %}
+          <button
+            class="btn btn-info btn-lg"
+            id="cont_row_button1"
+            onclick="showPopup('{{ drink.keys()|first }}')"
+          >
+            {{ drink.keys()|first }}
+          </button>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="row2">
+        <div
+          class="col-sm-12"
+          id="cont_row2"
+          style="padding-left: 40%; padding-right: 40%"
+        >
+          <form action="/menu" method="get">
+            <button class="btn btn-primary btn-lg btn-block" type="submit">
+              <span class="glyphicon glyphicon-search"></span> FATURAÇÃO
+            </button>
+          </form>
+        </div>
+      </div>
+      <div id="popup">
+        <div class="popup-content">
+          <form
+            id="orderForm"
+            action="/order"
+            method="post"
+            class="form-inline"
+          >
+            <div class="form-group">
+              <label
+                for="quantity"
+                class="label label-warning"
+                style="margin-right: 10px"
+              ></label>
+              <input
+                type="number"
+                class="btn btn-default btn-lg"
+                id="quantity"
+                name="num_drinks"
+              />
+            </div>
+            <div class="row justify-content-center">
+              <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                <div class="number-table">
+                  <table>
+                    <tr>
+                      <td>
+                        <button
+                          class="btn btn-default"
+                          onclick="setQuantity(1); return false;"
+                        >
+                          1
+                        </button>
+                      </td>
+                      <td>
+                        <button
+                          class="btn btn-default"
+                          onclick="setQuantity(2); return false;"
+                        >
+                          2
+                        </button>
+                      </td>
+                      <td>
+                        <button
+                          class="btn btn-default"
+                          onclick="setQuantity(3); return false;"
+                        >
+                          3
+                        </button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <button
+                          class="btn btn-default"
+                          onclick="setQuantity(4); return false;"
+                        >
+                          4
+                        </button>
+                      </td>
+                      <td>
+                        <button
+                          class="btn btn-default"
+                          onclick="setQuantity(5); return false;"
+                        >
+                          5
+                        </button>
+                      </td>
+                      <td>
+                        <button
+                          class="btn btn-default"
+                          onclick="setQuantity(6); return false;"
+                        >
+                          6
+                        </button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <button
+                          class="btn btn-default"
+                          onclick="setQuantity(7); return false;"
+                        >
+                          7
+                        </button>
+                      </td>
+                      <td>
+                        <button
+                          class="btn btn-default"
+                          onclick="setQuantity(8); return false;"
+                        >
+                          8
+                        </button>
+                      </td>
+                      <td>
+                        <button
+                          class="btn btn-default"
+                          onclick="setQuantity(9); return false;"
+                        >
+                          9
+                        </button>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="form-group" style="margin-top: 20px">
+              <label
+                class="label label-warning"
+                style="margin-right: 10px"
+              ></label>
+              <div class="btn-group">
+                <button
+                  type="submit"
+                  class="btn btn-success btn-lg"
+                  name="method_payment"
+                  value="cash"
+                >
+                  Cash
+                </button>
+                <button
+                  type="submit"
+                  class="btn btn-primary btn-lg"
+                  name="method_payment"
+                  value="card"
+                >
+                  Card
+                </button>
+                <input type="hidden" id="drink" name="drink" />
+              </div>
+            </div>
+            <div class="form-group" style="margin-top: 20px; margin-left: 10px">
+              <button
+                type="button"
+                class="btn btn-danger btn-lg"
+                onclick="hidePopup()"
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <script>
+      function showPopup(drinkName) {
+        document.getElementById("drink").value = drinkName;
+        document.getElementById("popup").style.display = "block";
+      }
+
+      function hidePopup() {
+        document.getElementById("popup").style.display = "none";
+      }
+
+      function setQuantity(quantity) {
+        document.getElementById("quantity").value = quantity;
+      }
+    </script>
+  </body>
+</html>
