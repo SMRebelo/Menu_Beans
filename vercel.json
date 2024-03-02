@@ -1,0 +1,12 @@
+{
+    "functions": {
+      "api/index": {
+        "runtime": "vercel-node@1.0.0",
+        "maxDuration": 30
+      }
+    },
+    "routes": [
+      { "src": "/api/(.*)", "dest": "api/$1" },
+      { "src": "/(.*)", "dest": "index.html" }
+    ]
+  }
