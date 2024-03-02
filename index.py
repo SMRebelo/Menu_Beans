@@ -4,7 +4,7 @@
 #                                            pip install -r requirements.txt
 ###############################################################################################
 from flask import Flask
-from flask import Flask, render_template, request, session, redirect, send_file, url_for
+from flask import Flask, render_template, request, session, redirect, send_file, url_for, make_response
 from rich.console import Console
 from rich.console import Console
 import os 
@@ -13,6 +13,8 @@ import time
 from beaupy.spinners import *
 from prompt_toolkit import prompt
 from datetime import datetime
+import csv
+import io
 
 console = Console()
 
@@ -222,18 +224,22 @@ def export_orders():
 
     if orders:
         try:
-            file_name = 'orders.txt'
-            file_path = os.path.join(app.root_path, file_name)
-            with open(file_path, 'w') as file:
-                for order in orders:
-                    file.write(f"{order['drink_name']}, {order['num_drinks']}, {order['meth_payment']}, {order['date']}, {order['time']}\n")
-            return send_file(file_path, as_attachment=True)
+            output = io.StringIO()
+            writer = csv.DictWriter(output, fieldnames=['drink_name', 'num_drinks', 'meth_payment', 'date', 'time'])
+            writer.writeheader()
+            writer.writerows(orders)
+            output.seek(0)
+            
+            response = make_response(output.getvalue())
+            response.headers["Content-Disposition"] = "attachment; filename=orders.csv"
+            response.headers["Content-type"] = "text/csv"
+            
+            return response
         except Exception as e:
             return f"Error exporting orders: {e}", 500
-             
     else:
         message = "No orders to export."
-        return render_template('index', drinks=drinks, message=message)
+        return render_template('index.html', drinks=drinks, message=message)
     
 
 if __name__ == '__main__':
